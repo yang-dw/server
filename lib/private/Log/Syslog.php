@@ -25,21 +25,19 @@
 
 namespace OC\Log;
 
-class Syslog {
-	static protected $levels = array(
+use OCP\IConfig;
+
+class Syslog implements IWritable {
+	static protected $levels = [
 		\OCP\Util::DEBUG => LOG_DEBUG,
 		\OCP\Util::INFO => LOG_INFO,
 		\OCP\Util::WARN => LOG_WARNING,
 		\OCP\Util::ERROR => LOG_ERR,
 		\OCP\Util::FATAL => LOG_CRIT,
-	);
+	];
 
-	/**
-	 * Init class data
-	 */
-	public static function init() {
-		openlog(\OC::$server->getSystemConfig()->getValue("syslog_tag", "ownCloud"), LOG_PID | LOG_CONS, LOG_USER);
-		// Close at shutdown
+	public function __construct(IConfig $config) {
+		openlog($config->getSystemValue('syslog_tag', 'ownCloud'), LOG_PID | LOG_CONS, LOG_USER);
 		register_shutdown_function('closelog');
 	}
 
@@ -49,7 +47,7 @@ class Syslog {
 	 * @param string $message
 	 * @param int $level
 	 */
-	public static function write($app, $message, $level) {
+	public function write($app, $message, $level) {
 		$syslog_level = self::$levels[$level];
 		syslog($syslog_level, '{'.$app.'} '.$message);
 	}
