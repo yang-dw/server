@@ -155,7 +155,7 @@ class File implements IWriter, IFileBased {
 	 * @param int $offset
 	 * @return array
 	 */
-	public function getEntries($limit=50, $offset=0) {
+	public function getEntries(int $limit=50, int $offset=0):array {
 		$minLevel = $this->config->getSystemValue("loglevel", ILogger::WARN);
 		$entries = array();
 		$handle = @fopen($this->logFile, 'rb');
@@ -200,7 +200,7 @@ class File implements IWriter, IFileBased {
 	/**
 	 * @return string
 	 */
-	public function getLogFilePath() {
+	public function getLogFilePath():string {
 		return $this->logFile;
 	}
 }
