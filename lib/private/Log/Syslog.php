@@ -26,8 +26,9 @@
 namespace OC\Log;
 
 use OCP\IConfig;
+use OCP\Log\IWriter;
 
-class Syslog implements IWritable {
+class Syslog implements IWriter {
 	static protected $levels = [
 		\OCP\Util::DEBUG => LOG_DEBUG,
 		\OCP\Util::INFO => LOG_INFO,
@@ -47,7 +48,7 @@ class Syslog implements IWritable {
 	 * @param string $message
 	 * @param int $level
 	 */
-	public function write($app, $message, $level) {
+	public function write(string $app, $message, int $level) {
 		$syslog_level = self::$levels[$level];
 		syslog($syslog_level, '{'.$app.'} '.$message);
 	}

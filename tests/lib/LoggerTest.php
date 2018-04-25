@@ -9,8 +9,9 @@
 namespace Test;
 
 use OC\Log;
+use OCP\Log\IWriter;
 
-class LoggerTest extends TestCase implements Log\IWritable {
+class LoggerTest extends TestCase implements IWriter {
 
 	/** @var \OC\SystemConfig|\PHPUnit_Framework_MockObject_MockObject */
 	private $config;
@@ -28,7 +29,7 @@ class LoggerTest extends TestCase implements Log\IWritable {
 		parent::setUp();
 
 		$this->logs = [];
-		$this->config = $this->createMock(\OC\SystemConfig::class);
+		$this->config = $this->createMock(\OCP\IConfig::class);
 		$this->registry = $this->createMock(\OCP\Support\CrashReport\IRegistry::class);
 		$this->logger = new Log($this, $this->config, null, $this->registry);
 	}
@@ -43,7 +44,7 @@ class LoggerTest extends TestCase implements Log\IWritable {
 
 	public function testAppCondition() {
 		$this->config->expects($this->any())
-			->method('getValue')
+			->method('getSystemValue')
 			->will(($this->returnValueMap([
 				['loglevel', \OCP\Util::WARN, \OCP\Util::WARN],
 				['log.condition', [], ['apps' => ['files']]]
@@ -65,7 +66,7 @@ class LoggerTest extends TestCase implements Log\IWritable {
 		return $this->logs;
 	}
 
-	public function write($app, $message, $level) {
+	public function write(string $app, $message, int $level) {
 		$this->logs[]= "$level $message";
 	}
 
