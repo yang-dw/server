@@ -24,10 +24,10 @@
 
 namespace OCA\DAV\Tests\unit\Connector\Sabre;
 
+use OC\SystemConfig;
 use OCA\DAV\Connector\Sabre\Exception\InvalidPath;
 use OCA\DAV\Connector\Sabre\ExceptionLoggerPlugin as PluginToTest;
 use OC\Log;
-use OCP\IConfig;
 use PHPUnit_Framework_MockObject_MockObject;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\ServiceUnavailable;
@@ -56,9 +56,9 @@ class ExceptionLoggerPluginTest extends TestCase {
 	private $logger;
 
 	private function init() {
-		$config = $this->createMock(IConfig::class);
+		$config = $this->createMock(SystemConfig::class);
 		$config->expects($this->any())
-			->method('getSystemValue')
+			->method('getValue')
 			->willReturnCallback(function($key, $default) {
 				switch ($key) {
 					case 'loglevel':

@@ -100,7 +100,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function emergency(string $message, array $context = []) {
-		$this->log(Util::FATAL, $message, $context);
+		$this->log(ILogger::FATAL, $message, $context);
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function alert(string $message, array $context = []) {
-		$this->log(Util::ERROR, $message, $context);
+		$this->log(ILogger::ERROR, $message, $context);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function critical(string $message, array $context = []) {
-		$this->log(Util::ERROR, $message, $context);
+		$this->log(ILogger::ERROR, $message, $context);
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function error(string $message, array $context = []) {
-		$this->log(Util::ERROR, $message, $context);
+		$this->log(ILogger::ERROR, $message, $context);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function warning(string $message, array $context = []) {
-		$this->log(Util::WARN, $message, $context);
+		$this->log(ILogger::WARN, $message, $context);
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function notice(string $message, array $context = []) {
-		$this->log(Util::INFO, $message, $context);
+		$this->log(ILogger::INFO, $message, $context);
 	}
 
 	/**
@@ -177,7 +177,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function info(string $message, array $context = []) {
-		$this->log(Util::INFO, $message, $context);
+		$this->log(ILogger::INFO, $message, $context);
 	}
 
 	/**
@@ -188,7 +188,7 @@ class Log implements ILogger {
 	 * @return void
 	 */
 	public function debug(string $message, array $context = []) {
-		$this->log(Util::DEBUG, $message, $context);
+		$this->log(ILogger::DEBUG, $message, $context);
 	}
 
 
@@ -253,7 +253,7 @@ class Log implements ILogger {
 
 		// if log condition is satisfied change the required log level to DEBUG
 		if ($this->logConditionSatisfied) {
-			return Util::DEBUG;
+			return ILogger::DEBUG;
 		}
 
 		if (isset($context['app'])) {
@@ -267,11 +267,11 @@ class Log implements ILogger {
 			if (!empty($logCondition)
 				&& isset($logCondition['apps'])
 				&& in_array($app, $logCondition['apps'], true)) {
-				return Util::DEBUG;
+				return ILogger::DEBUG;
 			}
 		}
 
-		return min($this->config->getValue('loglevel', Util::WARN), Util::FATAL);
+		return min($this->config->getValue('loglevel', ILogger::WARN), ILogger::FATAL);
 	}
 
 	/**
@@ -284,7 +284,7 @@ class Log implements ILogger {
 	 */
 	public function logException(\Throwable $exception, array $context = []) {
 		$app = $context['app'] ?? 'no app in context';
-		$level = $context['level'] ?? Util::ERROR;
+		$level = $context['level'] ?? ILogger::ERROR;
 
 		$serializer = new ExceptionSerializer();
 		$data = $serializer->serializeException($exception);

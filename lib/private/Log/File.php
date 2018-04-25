@@ -37,6 +37,7 @@
 
 namespace OC\Log;
 use OCP\IConfig;
+use OCP\ILogger;
 use OCP\Log\IFileBased;
 use OCP\Log\IWriter;
 
@@ -155,7 +156,7 @@ class File implements IWriter, IFileBased {
 	 * @return array
 	 */
 	public function getEntries($limit=50, $offset=0) {
-		$minLevel = $this->config->getSystemValue("loglevel", \OCP\Util::WARN);
+		$minLevel = $this->config->getSystemValue("loglevel", ILogger::WARN);
 		$entries = array();
 		$handle = @fopen($this->logFile, 'rb');
 		if ($handle) {
